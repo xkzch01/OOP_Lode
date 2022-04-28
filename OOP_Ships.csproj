@@ -71,6 +71,7 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Ships\DetermineField.cs" />
     <Compile Include="Grid.aspx.cs">
       <DependentUpon>Grid.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -79,6 +80,9 @@
       <DependentUpon>Grid.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Ships\Drawing.cs" />
+    <Compile Include="Ships\SectorA.cs" />
+    <Compile Include="Ships\SectorB.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -89,6 +93,7 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
