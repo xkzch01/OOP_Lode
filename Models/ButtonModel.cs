@@ -13,5 +13,14 @@ namespace OOP_Ships_Project.Models
         {
             State = state;
         }
+
+    }
+    public class ShipsModel
+    {
+        public int CurrentStanding { get; set; }
+        public ShipsModel(int state)
+        {
+            CurrentStanding = state;
+        }
     }
 }
