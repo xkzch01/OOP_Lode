@@ -188,10 +188,12 @@
 
     @if (Model[200].State == 0)
     {
+        Model[203].State = 2;
         <script>alert("Congratulations! Player A won! GGs <3");</script>
     }
     @if (Model[201].State == 0)
     {
+        Model[203].State = 2;
         <script>alert("Congratulations! Player B won! GGs <3");</script>
     }
 
