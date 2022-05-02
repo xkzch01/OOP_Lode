@@ -10,51 +10,72 @@ namespace OOP_Ships_Project.Controllers
     public class ButtonController : Controller
     {
         // GET: Button
-        static List<ButtonModel> buttons = new List<ButtonModel>();
-        static List<ButtonModel> shipLocation = new List<ButtonModel>();
-        static List<ShipsModel> alive = new List<ShipsModel>();
-        static bool playerTurn = false;
+        static List<DataModel> data = new List<DataModel>(); // List of button states, ship alive count and player turn
+        static List<DataModel> shipLocation = new List<DataModel>(); // List of generated ship locations, 1 represents ship, 2 represents empty water
+        bool pageLoaded = false;
 
-        // GET: Button
-        public ActionResult Index()
+    // GET: Button
+    public ActionResult Index()
         {
-            alive.Add(new ShipsModel(0));
-            alive.Add(new ShipsModel(0));
-
-            Random random = new Random();
-            for (int i = 0; i < 200; i++)
-            {
-                buttons.Add(new ButtonModel(0));
-                if (random.Next(10) > 5)
-                {
-                    shipLocation.Add(new ButtonModel(1));
-                    if (i < 100)
-                        alive[0].CurrentStanding++;
-                    else
-                        alive[1].CurrentStanding++;
-                }
-                else
-                    shipLocation.Add(new ButtonModel(2));
-            }
-            return View("Index", buttons);
+            if (!pageLoaded)
+                SetShipPosition();
+            return View("Index", data);
         }
         public ActionResult HandleButtonClick(string pButtons)
         {
             int buttonNumber = Int32.Parse(pButtons);
-            if ((buttonNumber < 100 && !playerTurn) || (buttonNumber > 99 && playerTurn))
+            if ((buttonNumber < 100 && data[202].State == 0) || (buttonNumber > 99 && data[202].State == 1)) //Let the player who's turn it is, play
             {
-                buttons[buttonNumber].State = shipLocation[buttonNumber].State;
-                playerTurn = !playerTurn;
+                if (data[203].State == 0) data[203].State = 1; //Set a game in progress state
+
+                data[buttonNumber].State = shipLocation[buttonNumber].State;
+                if (data[202].State == 0) data[202].State = 1;
+                else data[202].State = 0;
             }
 
             if (shipLocation[buttonNumber].State == 1)
             {
                 if (buttonNumber < 100)
-                    alive[0].CurrentStanding--;
+                    data[200].State--;
                 else
-                    alive[1].CurrentStanding--;
+                    data[201].State--;
             }
-            return View("Index", buttons);
+            return View("Index", data);
+        }
+        public ActionResult HandleTextInput(string SubmitText)
+        {
+            return View("Index", data);
+        }
+        private void SetShipPosition()
+        {
+            pageLoaded = true;
+            int[] alive = new int[2];
+            const int maxShipCount = 10;
+
+            for (int i = 0; i < 200; i++)
+            {
+                data.Add(new DataModel(0));
+                shipLocation.Add(new DataModel(2));
+            }
+            
+            Random random = new Random();
+            for (int i = 0; i < maxShipCount * 2; i++)
+            {
+                if(i < 10)
+                {
+                    shipLocation[random.Next(100)].State = 1;
+                    alive[0]++;
+                }
+                else
+                {
+                    shipLocation[random.Next(100) + 100].State = 1;
+                    alive[1]++;
+                }
+            }
+            data.Add(new DataModel(alive[0])); //Data index 200, status of Player A ships
+            data.Add(new DataModel(alive[1])); //Data index 201, status of Player B ships
+            data.Add(new DataModel(0)); //Data index 202, current players turn, convert bool to int
+            data.Add(new DataModel(0)); // Data index 203, current game state
         }
     }
 }
