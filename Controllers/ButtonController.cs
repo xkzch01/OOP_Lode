@@ -10,8 +10,8 @@ namespace OOP_Ships_Project.Controllers
     public class ButtonController : Controller
     {
         // GET: Button
-        static List<DataModel> data = new List<DataModel>(); // List of button states, ship alive count and player turn
-        static List<DataModel> shipLocation = new List<DataModel>(); // List of generated ship locations, 1 represents ship, 2 represents empty water
+       static List<DataModel> data = new List<DataModel>(); // List of button states, ship alive count and player turn
+       static List<DataModel> shipLocation = new List<DataModel>(); // List of generated ship locations, 1 represents ship, 2 represents empty water
         bool pageLoaded = false;
 
     // GET: Button
@@ -27,23 +27,38 @@ namespace OOP_Ships_Project.Controllers
             if ((buttonNumber < 100 && data[202].State == 0) || (buttonNumber > 99 && data[202].State == 1)) //Let the player who's turn it is, play
             {
                 if (data[203].State == 0) data[203].State = 1; //Set a game in progress state
-
-                data[buttonNumber].State = shipLocation[buttonNumber].State;
+                
                 if (data[202].State == 0) data[202].State = 1;
                 else data[202].State = 0;
-            }
+                data[buttonNumber].State = shipLocation[buttonNumber].State;
 
-            if (shipLocation[buttonNumber].State == 1)
-            {
-                if (buttonNumber < 100)
-                    data[200].State--;
-                else
-                    data[201].State--;
+                if (shipLocation[buttonNumber].State == 1)
+                {
+                    if (buttonNumber < 100)
+                        data[200].State--;
+                    else
+                        data[201].State--;
+                }
             }
             return View("Index", data);
         }
-        public ActionResult HandleTextInput(string SubmitText)
+        public ActionResult HandleTextInput(string AXcord, string AYcord, string BXcord, string BYcord)
         {
+            int cord;
+            if (data[202].State == 0 && (AXcord != "" || AYcord != ""))
+            {
+                cord = (Convert.ToInt32(AYcord) - 1) * 10 + (int)Convert.ToChar(AXcord) - 'a';
+                data[cord].State = shipLocation[cord].State;
+            }
+            else if (data[202].State == 1 && (BXcord != "" || BYcord != ""))
+            {
+                cord = (Convert.ToInt32(BYcord) - 1) * 10 + (int)Convert.ToChar(BXcord) - 'a';
+                data[cord + 100].State = shipLocation[cord + 100].State;
+            }
+            else { return View("Index", data); }
+
+            if (data[202].State == 0) data[202].State = 1;
+            else data[202].State = 0;
             return View("Index", data);
         }
         private void SetShipPosition()
