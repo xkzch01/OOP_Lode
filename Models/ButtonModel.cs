@@ -5,13 +5,14 @@ using System.Web;
 
 namespace OOP_Ships_Project.Models
 {
-    public class ButtonModel
+    public class DataModel
     {
         public int State { get; set; }
 
-        public ButtonModel(int state)
+        public DataModel(int state)
         {
             State = state;
         }
+
     }
 }
