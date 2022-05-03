@@ -24,7 +24,7 @@ namespace OOP_Ships_Project.Controllers
         public ActionResult HandleButtonClick(string pButtons)
         {
             int buttonNumber = Int32.Parse(pButtons);
-            if ((buttonNumber < 100 && data[202].State == 0) || (buttonNumber > 99 && data[202].State == 1)) //Let the player who's turn it is, play
+            if (((buttonNumber < 100 && data[202].State == 0) || (buttonNumber > 99 && data[202].State == 1)) && (data[buttonNumber].State != shipLocation[buttonNumber].State)) //Let the player who's turn it is, play
             {
                 if (data[203].State == 0) data[203].State = 1; //Set a game in progress state
                 
